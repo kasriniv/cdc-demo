@@ -71,4 +71,53 @@ data:
     ALTER TABLE HOLDINGEJB
     ADD CONSTRAINT PK_HOLDINGEJB PRIMARY KEY (HOLDINGID);
     GO
+    CREATE TABLE ACCOUNTPROFILEEJB
+    (
+        ADDRESS VARCHAR(250),
+    PASSWD VARCHAR(250),
+    USERID VARCHAR(250) NOT NULL,
+    EMAIL VARCHAR(250),
+    CREDITCARD VARCHAR(250),
+    FULLNAME VARCHAR(250));
+    GO
+    ALTER TABLE ACCOUNTPROFILEEJB
+    ADD CONSTRAINT PK_ACCOUNTPROFILE2 PRIMARY KEY (USERID);
+    GO
+        OrderUser [NVARCHAR](10) NOT NULL
+        -- specify more columns here
+    );
+    GO
+    -- Enable Database for CDC template
+    EXEC sys.sp_cdc_enable_db
+    GO
+    -- Enable a Table
+    EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'Orders',
+    @role_name = NULL,
+    @supports_net_changes = 1
+    GO
+
+    DROP TABLE QUOTEEJB;
+    GO
+    DROP TABLE KEYGENEJB;
+    GO
+    DROP TABLE ACCOUNTEJB;
+    GO
+    DROP TABLE ORDEREJB;
+    GO
+    CREATE TABLE HOLDINGEJB
+    (
+        PURCHASEPRICE DECIMAL(14, 2),
+        HOLDINGID INTEGER NOT NULL,
+        QUANTITY DOUBLE NOT NULL,
+        PURCHASEDATE TIMESTAMP,
+        ACCOUNT_ACCOUNTID INTEGER,
+    QUOTE_SYMBOL VARCHAR(250)
+    );
+    GO
+
+    ALTER TABLE HOLDINGEJB
+    ADD CONSTRAINT PK_HOLDINGEJB PRIMARY KEY (HOLDINGID);
+    GO
 
