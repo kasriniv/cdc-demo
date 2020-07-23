@@ -12,7 +12,7 @@ spec:
     database.port: "3306"
     database.user: "root"
     database.password: "debezium"
-    database.dbname: "sampledb"
+    database.dbname: "inventory"
     database.server.name: "orders"
     table.whitelist: "inventory"
     database.history.kafka.bootstrap.servers: "my-cluster-kafka-bootstrap:9092"
