@@ -48,14 +48,14 @@ data:
     @role_name = NULL,
     @supports_net_changes = 1
     GO
-    DROP TABLE QUOTEEJB;
-     GO
-    DROP TABLE KEYGENEJB;
-     GO
-     DROP TABLE ACCOUNTEJB;
-      GO
-      DROP TABLE ORDEREJB;
- GO
+    --DROP TABLE QUOTEEJB;
+   --  GO
+   -- DROP TABLE KEYGENEJB;
+    -- GO
+    -- DROP TABLE ACCOUNTEJB;
+    -- --  GO
+      --DROP TABLE ORDEREJB;
+ --GO
 
 CREATE TABLE HOLDINGEJB
   (PURCHASEPRICE DECIMAL(14, 2),
