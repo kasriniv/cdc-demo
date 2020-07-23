@@ -10,10 +10,10 @@ spec:
   config:
     database.hostname: "172.30.27.107"
     database.port: "3306"
-    database.user: "mysqluser"
-    database.password: "mysqlpw"
+    database.user: "root"
+    database.password: "debezium"
     database.dbname: "sampledb"
-    database.server.name: "dbserver1"
+    database.server.name: "orders"
     table.whitelist: "inventory"
     database.history.kafka.bootstrap.servers: "my-cluster-kafka-bootstrap:9092"
     database.history.kafka.topic: "schema-changes.inventory"
