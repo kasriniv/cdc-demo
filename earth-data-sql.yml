@@ -83,41 +83,144 @@ data:
     ALTER TABLE ACCOUNTPROFILEEJB
     ADD CONSTRAINT PK_ACCOUNTPROFILE2 PRIMARY KEY (USERID);
     GO
-        OrderUser [NVARCHAR](10) NOT NULL
-        -- specify more columns here
-    );
+    CREATE TABLE QUOTEEJB
+    (
+        LOW DECIMAL(14, 2),
+        OPEN1 DECIMAL(14, 2),
+        VOLUME DOUBLE NOT NULL,
+        PRICE DECIMAL(14, 2),
+        HIGH DECIMAL(14, 2),
+        COMPANYNAME VARCHAR(250),
+        SYMBOL VARCHAR(250) NOT NULL,
+        CHANGE1 DOUBLE NOT NULL);
     GO
-    -- Enable Database for CDC template
-    EXEC sys.sp_cdc_enable_db
+    ALTER TABLE QUOTEEJB
+    ADD CONSTRAINT PK_QUOTEEJB PRIMARY KEY (SYMBOL);
+    GO
+    CREATE TABLE KEYGENEJB
+    (
+        KEYVAL INTEGER NOT NULL,
+        KEYNAME VARCHAR(250) NOT NULL);
+    GO
+    ALTER TABLE KEYGENEJB
+    ADD CONSTRAINT PK_KEYGENEJB PRIMARY KEY (KEYNAME);
+    GO
+    INSERT INTO KEYGENEJB (KEYNAME,KEYVAL) VALUES ('account', 0);
+    GO
+    INSERT INTO KEYGENEJB (KEYNAME,KEYVAL) VALUES ('holding', 0);
+    GO
+    INSERT INTO KEYGENEJB (KEYNAME,KEYVAL) VALUES ('order', 0);
+    GO
+
+    CREATE TABLE ACCOUNTEJB
+    (
+        CREATIONDATE TIMESTAMP,
+        OPENBALANCE DECIMAL(14, 2),
+        LOGOUTCOUNT INTEGER NOT NULL,
+        BALANCE DECIMAL(14, 2),
+        ACCOUNTID INTEGER NOT NULL,
+        LASTLOGIN TIMESTAMP,
+        LOGINCOUNT INTEGER NOT NULL,
+        PROFILE_USERID VARCHAR(250));
+    GO
+    ALTER TABLE ACCOUNTEJB
+    ADD CONSTRAINT PK_ACCOUNTEJB PRIMARY KEY (ACCOUNTID);
+    GO
+    CREATE TABLE ORDEREJB
+    (
+        ORDERFEE DECIMAL(14, 2),
+        COMPLETIONDATE TIMESTAMP,
+        ORDERTYPE VARCHAR(250),
+        ORDERSTATUS VARCHAR(250),
+        PRICE DECIMAL(14, 2),
+        QUANTITY DOUBLE NOT NULL,
+        OPENDATE TIMESTAMP,
+        ORDERID INTEGER NOT NULL,
+        ACCOUNT_ACCOUNTID INTEGER,
+        QUOTE_SYMBOL VARCHAR(250),
+        HOLDING_HOLDINGID INTEGER);
+    GO
+    CREATE TABLE OUTBOXEVENT
+    (
+        ID VARCHAR(250),
+        AGGREGATETYPE VARCHAR(255),
+        AGGREGATEID VARCHAR(255),
+        TYPE VARCHAR(255),
+        PAYLOAD VARCHAR(32672));
+    GO
+    ALTER TABLE ORDEREJB
+    ADD CONSTRAINT PK_ORDEREJB PRIMARY KEY (ORDERID);
+    GO
+    CREATE INDEX ACCOUNT_USERID ON ACCOUNTEJB(PROFILE_USERID);
+    GO
+    CREATE INDEX HOLDING_ACCOUNTID ON HOLDINGEJB(ACCOUNT_ACCOUNTID);
+    GO
+    CREATE INDEX ORDER_ACCOUNTID ON ORDEREJB(ACCOUNT_ACCOUNTID);
+    GO
+    CREATE INDEX ORDER_HOLDINGID ON ORDEREJB(HOLDING_HOLDINGID);
+    GO
+    CREATE INDEX CLOSED_ORDERS ON ORDEREJB(ACCOUNT_ACCOUNTID,ORDERSTATUS);
     GO
     -- Enable a Table
     EXEC sys.sp_cdc_enable_table
     @source_schema = N'dbo',
-    @source_name = N'Orders',
+    @source_name = N'HOLDINGEJB',
     @role_name = NULL,
     @supports_net_changes = 1
     GO
 
-    DROP TABLE QUOTEEJB;
+    -- Enable a Table
+    EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'ACCOUNTPROFILEEJB',
+    @role_name = NULL,
+    @supports_net_changes = 1
     GO
-    DROP TABLE KEYGENEJB;
-    GO
-    DROP TABLE ACCOUNTEJB;
-    GO
-    DROP TABLE ORDEREJB;
-    GO
-    CREATE TABLE HOLDINGEJB
-    (
-        PURCHASEPRICE DECIMAL(14, 2),
-        HOLDINGID INTEGER NOT NULL,
-        QUANTITY DOUBLE NOT NULL,
-        PURCHASEDATE TIMESTAMP,
-        ACCOUNT_ACCOUNTID INTEGER,
-    QUOTE_SYMBOL VARCHAR(250)
-    );
+    -- Enable a Table
+    EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'QUOTEEJB',
+    @role_name = NULL,
+    @supports_net_changes = 1
     GO
 
-    ALTER TABLE HOLDINGEJB
-    ADD CONSTRAINT PK_HOLDINGEJB PRIMARY KEY (HOLDINGID);
+
+    -- Enable a Table
+    EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'KEYGENEJB',
+    @role_name = NULL,
+    @supports_net_changes = 1
     GO
+
+    -- Enable a Table
+    EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'ACCOUNTEJB',
+    @role_name = NULL,
+    @supports_net_changes = 1
+    GO
+    -- Enable a Table
+    EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'OUTBOXEVENT',
+    @role_name = NULL,
+    @supports_net_changes = 1
+    GO
+    -- Enable a Table
+    EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'OUTBOXEVENT',
+    @role_name = NULL,
+    @supports_net_changes = 1
+    GO
+
+    -- Enable a Table
+    EXEC sys.sp_cdc_enable_table
+    @source_schema = N'dbo',
+    @source_name = N'ORDEREJB',
+    @role_name = NULL,
+    @supports_net_changes = 1
+    GO
+
 
