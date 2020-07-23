@@ -10,8 +10,8 @@ spec:
   config:
     database.hostname: "mysql"
     database.port: "3306"
-    database.user: "mysqluser"
-    database.password: "mysqlpw"
+    database.user: "kavitha"
+    database.password: "welcome1"
     database.dbname: "sampledb"
     database.server.name: "dbserver1"
     table.whitelist: "inventory"
