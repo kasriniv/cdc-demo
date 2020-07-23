@@ -10,7 +10,7 @@ spec:
   config:
     database.hostname: "172.30.27.107"
     database.port: "3306"
-    database.user: "root"
+    database.user: "adfdfdasafd"
     database.password: "debezium"
     database.dbname: "inventory"
     database.server.name: "orders"
