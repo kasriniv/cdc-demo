@@ -8,10 +8,10 @@ spec:
   class: io.debezium.connector.mysql.MySqlConnector
   tasksMax: 1
   config:
-    database.hostname: "172.30.27.107"
+    database.hostname: "adsf"
     database.port: "3306"
     database.user: "tradedb"
-    database.password: "password"
+    database.password: "pasadsfsword"
     database.dbname: "tradedb"
     database.server.name: "trades"
     database.history.kafka.bootstrap.servers: "my-cluster-kafka-bootstrap:9092"
